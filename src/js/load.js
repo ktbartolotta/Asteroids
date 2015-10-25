@@ -15,6 +15,8 @@ Asteroids.Load.prototype = {
         this.load.spritesheet(
             'alien', '/assets/images/Alien2.png', 33, 33);
         this.load.image('alien-bullet', '/assets/images/AlienBullet.png');
+        this.load.image(
+            'alien-explosion', '/assets/images/AlienParticle.png');
     },
 
     create: function() {

@@ -9,7 +9,6 @@ Asteroids.Objects.Sprites.Asteroid = function(
     this.game = state.game;
     this.state = state;
     Phaser.Sprite.prototype.constructor.call(this, this.game, x, y, key);
-    this.game.world.add(this);
     this.anchor.setTo(0.5, 0.5);
     this.animations.add('spin');
     this.game.physics.enable(this);
@@ -22,7 +21,8 @@ Asteroids.Objects.Sprites.Asteroid = function(
     this.body.velocity.y = velY;
     this.animations.play('spin', 1, true);
 }
-Asteroids.Objects.Sprites.Asteroid.prototype = Object.create(Phaser.Sprite.prototype);
+Asteroids.Objects.Sprites.Asteroid.prototype =
+    Object.create(Phaser.Sprite.prototype);
 
 Asteroids.Objects.Sprites.Asteroid.prototype.constructor =
     Asteroids.Objects.Sprites.Asteroid;

@@ -3,7 +3,7 @@ var Asteroids = Asteroids || {};
 Asteroids.Game1 = function(game) {
 
     this.asteroids = null;
-    this.cursors = null;
+    //this.cursors = null;
     this.alien = null;
     this.bullets = null;
     this.bulletTime = 0;
@@ -14,20 +14,30 @@ Asteroids.Game1.prototype = {
     create: function() {
 
         this.game.physics.setBoundsToWorld();
+
+        //Add bullets
+        /*this.bullets = this.game.add.group()
+        for (var i; i < 40; i++) {
+
+            var bullet = new Asteroids.Objects.Sprites.Bullet(this,
+                0.5, 'alien-bullet');
+            this.bullets.add(bullet);
+        }*/
         // Controls
-        this.cursors = this.game.input.keyboard.createCursorKeys();
+        //this.cursors = this.game.input.keyboard.createCursorKeys();
         //bullets
-        /*this.bullets = this.game.add.group();
+        this.bullets = this.game.add.group();
         this.bullets.enableBody = true;
         this.bullets.createMultiple(40, 'alien-bullet');
         this.bullets.setAll('anchor.x', 0.5);
         this.bullets.setAll('anchor.y', 0.5);
         this.bullets.setAll('scale.x', 0.5);
-        this.bullets.setAll('scale.y', 0.5);*/
+        this.bullets.setAll('scale.y', 0.5);
+
 
         //Player
-        this.alien = new Asteroids.Objects.Sprites.Alien(this,
-            this.game.world.centerX, this.game.world.centerY, 'alien');
+        this.alien = this.game.world.add(new Asteroids.Objects.Sprites.Alien(
+            this, this.game.world.centerX, this.game.world.centerY, 'alien'));
 
         // Asteroid
         this.asteroids = this.game.add.group();
@@ -41,6 +51,7 @@ Asteroids.Game1.prototype = {
                 this.game.rnd.between(-50, 50),
                 this.game.rnd.between(-180, 180),
                 'asteroid' + this.game.rnd.between(2, 4));
+            this.asteroids.add(asteroid);
         }
 
     },
@@ -57,17 +68,18 @@ Asteroids.Game1.prototype = {
         this.alien.update();
 
         //Update player bullets
-        /*if(this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
 
             this.fireBullet();
         }
         this.bullets.forEachExists(function(b) {
 
             this.game.world.wrap(b, 0, true);
-        }, this);*/
+        }, this);
+
     },
 
-    /*fireBullet: function() {
+    fireBullet: function() {
 
         //Introduce the world to Mr. Player Bullet
         if(this.game.time.now > this.bulletTime) {
@@ -80,10 +92,10 @@ Asteroids.Game1.prototype = {
                 bullet.rotation = this.alien.rotation;
                 this.game.physics.arcade.velocityFromRotation(
                     this.alien.rotation, 400, bullet.body.velocity);
-                this.bulletTime = this.game.time.now + 50;
+                this.bulletTime = this.game.time.now + 100;
              }
         }
-    },*/
+    },
 
     render: function() {
 
