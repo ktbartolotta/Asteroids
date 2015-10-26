@@ -7,6 +7,7 @@ Asteroids.Game1 = function(game) {
     this.alien = null;
     this.bullets = null;
     this.bulletTime = 0;
+    this.explosionEmitter = null;
 };
 
 Asteroids.Game1.prototype = {
@@ -54,6 +55,13 @@ Asteroids.Game1.prototype = {
             this.asteroids.add(asteroid);
         }
 
+        //Exploding asteroid emitter
+        this.explosionEmitter = this.game.add.emitter(200, 200, 100)
+        this.explosionEmitter.makeParticles('explosion');
+        this.explosionEmitter.setAlpha(1, 0, 100);
+        this.explosionEmitter.setScale(.01, 3.0, .01, 3.0, 800);
+        //this.explosionEmitter.start(false, 500, 5);
+
     },
 
     update: function() {
@@ -76,6 +84,10 @@ Asteroids.Game1.prototype = {
 
             this.game.world.wrap(b, 0, true);
         }, this);
+
+        //Check for bullet/asteroid collision
+        this.game.physics.arcade.collide(
+            this.bullets, this.asteroids, this.onBlam);
 
     },
 
@@ -100,6 +112,16 @@ Asteroids.Game1.prototype = {
     render: function() {
 
         this.game.debug.spriteInfo(this.alien, 20, 32);
+    },
+
+    onBlam: function(bullet, asteroid) {
+
+
+        /*this.explosionEmitter.x = bullet.body.x;
+        this.explosionEmitter.y = bullet.body.y;
+        this.explosionEmitter.start(true, 1000, null, 100);*/
+        bullet.kill();
+        asteroid.kill();
     }
 
 };

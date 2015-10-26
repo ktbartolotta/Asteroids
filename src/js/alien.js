@@ -20,8 +20,9 @@ Asteroids.Objects.Sprites.Alien = function(state, x, y, key) {
     this.thrustEmmiter = this.game.add.emitter(
         this.x + this.width / 2,
         this.y + this.height / 2, 400);
+
     this.thrustEmmiter.makeParticles('alien-explosion');
-    this.thrustEmmiter.setAlpha(1, 0, 500);
+    this.thrustEmmiter.setAlpha(1, 0, 400);
     this.thrustEmmiter.setScale(0.01, 1.0, 0.01, 1.0, 1000);
     this.thrustEmmiter.start(false, 500, 5);
 
@@ -40,11 +41,13 @@ Asteroids.Objects.Sprites.Alien.prototype.update = function() {
     //Update player rotation
     this.body.angularVelocity = 0;
     if(input.isDown(Phaser.Keyboard.LEFT)) {
-        this.body.angularVelocity = -150;
+        this.body.angularVelocity = -200;
     }
     else if(input.isDown(Phaser.Keyboard.RIGHT)) {
-        this.body.angularVelocity = 150;
+        this.body.angularVelocity = 200;
     }
+    this.body.acceleration.set(0);
+    this.animations.stop(true);
 
     //Update player thrust
     if(input.isDown(Phaser.Keyboard.UP)) {
@@ -53,6 +56,7 @@ Asteroids.Objects.Sprites.Alien.prototype.update = function() {
             this.rotation, this.maxVelocity,
             this.body.acceleration);
         this.animations.play('floaty', 4, true);
+
         //Emit smoke
         this.thrustEmmiter.minParticleSpeed.set(
             this.body.velocity.x * (-1), this.body.velocity.y * (-1));
@@ -64,6 +68,10 @@ Asteroids.Objects.Sprites.Alien.prototype.update = function() {
     else {
         this.body.acceleration.set(0);
         this.animations.stop(true);
+        this.thrustEmmiter.minParticleSpeed.set(0, 0);
+        this.thrustEmmiter.maxParticleSpeed.set(0, 0);
+        this.thrustEmmiter.emitX = -50;
+        this.thrustEmmiter.emitY = -50;
     }
     this.game.world.wrap(this, 0, true);
 }
