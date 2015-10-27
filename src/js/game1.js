@@ -7,7 +7,7 @@ Asteroids.Game1 = function(game) {
     this.alien = null;
     this.bullets = null;
     this.bulletTime = 0;
-    this.explosionEmitter = null;
+    //this.explosionEmitter = null;
 };
 
 Asteroids.Game1.prototype = {
@@ -43,40 +43,41 @@ Asteroids.Game1.prototype = {
         // Asteroid
         this.asteroids = this.game.add.group();
 
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 10; i++) {
             var asteroid = new Asteroids.Objects.Sprites.Asteroid(this,
                 this.game.world.randomX,
                 this.game.world.randomY,
                 this.game.rnd.realInRange(.6, 1),
                 this.game.rnd.between(-50, 50),
                 this.game.rnd.between(-50, 50),
-                this.game.rnd.between(-180, 180),
+                this.game.rnd.between(-180, 180), 1,
                 'asteroid' + this.game.rnd.between(2, 4));
             this.asteroids.add(asteroid);
         }
 
-        //Exploding asteroid emitter
-        this.explosionEmitter = this.game.add.emitter(200, 200, 100)
+        /*//Exploding asteroid emitter
+        this.explosionEmitter = this.game.add.emitter(200, 200, 50)
         this.explosionEmitter.makeParticles('explosion');
-        this.explosionEmitter.setAlpha(1, 0, 100);
-        this.explosionEmitter.setScale(.01, 3.0, .01, 3.0, 800);
-        //this.explosionEmitter.start(false, 500, 5);
+        this.explosionEmitter.setAlpha(1, 0, 500);
+        this.explosionEmitter.setScale(.01, 2.0, .01, 2.0, 3000);*/
 
     },
 
     update: function() {
 
+        var input = this.game.input.keyboard;
+
         //Update asteroids
-        this.asteroids.forEach(function(a) {
+        this.asteroids.forEachExists(function(a) {
 
             a.update();
         }, this);
 
         //Update Player
-        this.alien.update();
+        this.alien.update(input);
 
         //Update player bullets
-        if(this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
+        if(input.isDown(Phaser.Keyboard.SPACEBAR)) {
 
             this.fireBullet();
         }
@@ -87,7 +88,7 @@ Asteroids.Game1.prototype = {
 
         //Check for bullet/asteroid collision
         this.game.physics.arcade.collide(
-            this.bullets, this.asteroids, this.onBlam);
+            this.bullets, this.asteroids, this.onBlam, null, this);
 
     },
 
@@ -117,11 +118,39 @@ Asteroids.Game1.prototype = {
     onBlam: function(bullet, asteroid) {
 
 
-        /*this.explosionEmitter.x = bullet.body.x;
-        this.explosionEmitter.y = bullet.body.y;
-        this.explosionEmitter.start(true, 1000, null, 100);*/
+        //Exploding asteroid emitter
+        explosionEmitter = this.game.add.emitter(
+            bullet.body.x, bullet.body.y, 50)
+        explosionEmitter.makeParticles('explosion');
+        explosionEmitter.setAlpha(1, 0, 1000);
+        explosionEmitter.setScale(.01, 2.0, .01, 2.0, 3000);
+        explosionEmitter.start(true, 1000, null, 100);
+        this.game.time.events.add(
+            3000, this.destroyEmitter, this, explosionEmitter);
+
+        if (asteroid.getBreakStage() < 3) {
+            var
+                x = asteroid.body.x,
+                y = asteroid.body.y,
+                scale = asteroid.scale.x / 2,
+                velX = asteroid.body.velocity.x,
+                velY = asteroid.body.velocity.y,
+                angle = asteroid.angle,
+                breakStage = asteroid.getBreakStage() + 1,
+                key = asteroid.key;
+            this.asteroids.add(new Asteroids.Objects.Sprites.Asteroid(this,
+                    x, y, scale, velX, velY, angle + 20, breakStage, key));
+            this.asteroids.add(new Asteroids.Objects.Sprites.Asteroid(this,
+                    x, y, scale, velX, velY, angle - 20, breakStage, key));
+
+         }
         bullet.kill();
-        asteroid.kill();
+        asteroid.destroy();
+    },
+
+    destroyEmitter: function(emitter) {
+
+        emitter.destroy();
     }
 
 };

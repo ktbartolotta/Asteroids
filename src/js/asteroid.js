@@ -4,7 +4,7 @@ Asteroids.Objects.Sprites = Asteroids.Objects.Sprites || {};
 
 
 Asteroids.Objects.Sprites.Asteroid = function(
-        state, x, y, scale, velX, velY, angle, key) {
+        state, x, y, scale, velX, velY, angle, breakStage, key) {
 
     this.game = state.game;
     this.state = state;
@@ -20,6 +20,8 @@ Asteroids.Objects.Sprites.Asteroid = function(
     this.body.velocity.x = velX;
     this.body.velocity.y = velY;
     this.animations.play('spin', 1, true);
+
+    this.breakStage = breakStage;
 }
 Asteroids.Objects.Sprites.Asteroid.prototype =
     Object.create(Phaser.Sprite.prototype);
@@ -31,4 +33,9 @@ Asteroids.Objects.Sprites.Asteroid.prototype.constructor =
 Asteroids.Objects.Sprites.Asteroid.prototype.update = function() {
 
     this.game.world.wrap(this, 0, true);
+}
+
+Asteroids.Objects.Sprites.Asteroid.prototype.getBreakStage = function() {
+
+    return this.breakStage;
 }

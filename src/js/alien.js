@@ -34,9 +34,9 @@ Asteroids.Objects.Sprites.Alien.prototype.constructor =
     Asteroids.Objects.Sprites.Alien;
 
 
-Asteroids.Objects.Sprites.Alien.prototype.update = function() {
+Asteroids.Objects.Sprites.Alien.prototype.update = function(input) {
 
-    var input = this.game.input.keyboard;
+    //var input = this.game.input.keyboard;
 
     //Update player rotation
     this.body.angularVelocity = 0;
@@ -47,7 +47,6 @@ Asteroids.Objects.Sprites.Alien.prototype.update = function() {
         this.body.angularVelocity = 200;
     }
     this.body.acceleration.set(0);
-    this.animations.stop(true);
 
     //Update player thrust
     if(input.isDown(Phaser.Keyboard.UP)) {
