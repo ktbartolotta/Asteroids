@@ -65,8 +65,6 @@ Asteroids.Game1.prototype = {
 
     update: function() {
 
-        var input = this.game.input.keyboard;
-
         //Update asteroids
         this.asteroids.forEachExists(function(a) {
 
@@ -74,10 +72,10 @@ Asteroids.Game1.prototype = {
         }, this);
 
         //Update Player
-        this.alien.update(input);
+        this.alien.update();
 
         //Update player bullets
-        if(input.isDown(Phaser.Keyboard.SPACEBAR)) {
+        if(this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
 
             this.fireBullet();
         }

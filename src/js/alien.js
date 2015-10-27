@@ -34,9 +34,9 @@ Asteroids.Objects.Sprites.Alien.prototype.constructor =
     Asteroids.Objects.Sprites.Alien;
 
 
-Asteroids.Objects.Sprites.Alien.prototype.update = function(input) {
+Asteroids.Objects.Sprites.Alien.prototype.update = function() {
 
-    //var input = this.game.input.keyboard;
+    var input = this.game.input.keyboard;
 
     //Update player rotation
     this.body.angularVelocity = 0;
