@@ -97,7 +97,7 @@ Asteroids.Game1.prototype = {
                 bullet.rotation = this.alien.rotation;
                 this.game.physics.arcade.velocityFromRotation(
                     this.alien.rotation, 400, bullet.body.velocity);
-                this.bulletTime = this.game.time.now + 500;
+                this.bulletTime = this.game.time.now + 100;
              }
         }
     },
