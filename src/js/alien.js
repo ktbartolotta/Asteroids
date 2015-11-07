@@ -13,7 +13,7 @@ Asteroids.Objects.Sprites.Alien = function(state, x, y, key) {
     this.animations.add('floaty');
     this.game.physics.enable(this);
     this.checkWorldBounds = true;
-    this.body.drag.set(100);
+    this.body.drag.set(50);
     this.body.maxVelocity.set(400);
 
     //Player Thrust particle emitter

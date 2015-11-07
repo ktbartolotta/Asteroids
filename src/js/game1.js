@@ -55,12 +55,6 @@ Asteroids.Game1.prototype = {
             this.asteroids.add(asteroid);
         }
 
-        /*//Exploding asteroid emitter
-        this.explosionEmitter = this.game.add.emitter(200, 200, 50)
-        this.explosionEmitter.makeParticles('explosion');
-        this.explosionEmitter.setAlpha(1, 0, 500);
-        this.explosionEmitter.setScale(.01, 2.0, .01, 2.0, 3000);*/
-
     },
 
     update: function() {
@@ -103,7 +97,7 @@ Asteroids.Game1.prototype = {
                 bullet.rotation = this.alien.rotation;
                 this.game.physics.arcade.velocityFromRotation(
                     this.alien.rotation, 400, bullet.body.velocity);
-                this.bulletTime = this.game.time.now + 100;
+                this.bulletTime = this.game.time.now + 500;
              }
         }
     },
@@ -117,7 +111,7 @@ Asteroids.Game1.prototype = {
 
 
         //Exploding asteroid emitter
-        explosionEmitter = this.game.add.emitter(
+        var explosionEmitter = this.game.add.emitter(
             bullet.body.x, bullet.body.y, 50)
         explosionEmitter.makeParticles('explosion');
         explosionEmitter.setAlpha(1, 0, 1000);
@@ -126,20 +120,25 @@ Asteroids.Game1.prototype = {
         this.game.time.events.add(
             3000, this.destroyEmitter, this, explosionEmitter);
 
+        //Check if the asteroid needs to be split or killed.
         if (asteroid.getBreakStage() < 3) {
             var
                 x = asteroid.body.x,
                 y = asteroid.body.y,
                 scale = asteroid.scale.x / 2,
-                velX = asteroid.body.velocity.x,
-                velY = asteroid.body.velocity.y,
-                angle = asteroid.angle,
+                angle1 = asteroid.angle + 30,
+                angle2 = asteroid.angle - 30,
+                speed = asteroid.body.speed * 2,
+                vel1 = this.game.physics.arcade.velocityFromAngle(
+                    angle1, speed),
+                vel2 = this.game.physics.arcade.velocityFromAngle(
+                    angle2, speed),
                 breakStage = asteroid.getBreakStage() + 1,
                 key = asteroid.key;
             this.asteroids.add(new Asteroids.Objects.Sprites.Asteroid(this,
-                    x, y, scale, velX, velY, angle + 20, breakStage, key));
+                    x, y, scale, vel1.x, vel1.y, angle1, breakStage, key));
             this.asteroids.add(new Asteroids.Objects.Sprites.Asteroid(this,
-                    x, y, scale, velX, velY, angle - 20, breakStage, key));
+                    x, y, scale, vel2.x, vel2.y, angle2, breakStage, key));
 
          }
         bullet.kill();
